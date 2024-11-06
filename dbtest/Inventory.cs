@@ -44,7 +44,6 @@ namespace dbtest {
                     }
                 } catch (Exception ex) {
                     Console.WriteLine("Filling up data error: " + ex.Message);
-                    return null;
                 }
             }
             return DatabaseInventory;
