@@ -10,8 +10,7 @@ using System.ComponentModel.Design;
 
 namespace dbtest {
     class userPanel {
-        public Account account { get; set; }        
-        
+        public Account account { get; set; }          
         public userPanel(Account acc) {
             this.account = acc;
             frontPage();
@@ -82,7 +81,6 @@ namespace dbtest {
 
             public void userCart() {
                 userAccount userAccount = new(account);
-                Transaction transaction = new();
                 Inventory inventory = new();
 
                 string input;
@@ -105,6 +103,8 @@ namespace dbtest {
                 List<Inventory> userCart = userAccount.isUserCartNotEmpty() ? userAccount.getCartUserFromDatabase() : new();
 
                 int cartStorage = userCart.Count();
+                
+                Console.WriteLine(inventories.Count());
 
                 if (userCart.Count == 0) {
                     Console.WriteLine("You have no items in the cart.");
@@ -123,7 +123,7 @@ namespace dbtest {
                         break;
                     }
 
-                    if (chooseCart < 0 || chooseCart > inventories.Count) {
+                    if (chooseCart < 1 || chooseCart >= inventories.Count) {
                         Console.WriteLine("Your input is invalid");
                         continue;
                     }
@@ -139,7 +139,42 @@ namespace dbtest {
             }
         
         public void checkout() {
-            
+            userAccount userAccount = new(account);
+            Transaction transaction = new();
+            string choose;
+
+            Console.WriteLine("Do you want to checkout your items? (y/n) ");
+            choose = Console.ReadLine();
+
+            if (choose == "n") {
+                Console.WriteLine("Alright! see you!");
+                return;
+            }
+
+            if (choose != "y") {
+                Console.WriteLine("I cannot understand you. Sorry.");
+                return;
+            }
+
+            string uniqueTransactionID = transaction.uniqueTransactionID();
+            bool updateStatusOfItem = userAccount.updateCheckoutStatus();
+
+            if (!updateStatusOfItem) {
+                Console.WriteLine("Error fetching data of your cart.");
+                return;
+            }
+
+            List<Inventory> itemCheckout = userAccount.getCheckoutCartFromDatabase();
+            bool isDoneTransferringWithID = userAccount.insertIndividualRecordWithTransaction(uniqueTransactionID, itemCheckout);
+
+            if (!isDoneTransferringWithID) {
+                Console.WriteLine("Error inserting your data.");
+                return;
+            }
+
+            userAccount.deleteCheckoutItemFromUserCart();
+
+
         }
 
         //formality of the text
@@ -149,15 +184,18 @@ namespace dbtest {
         }
 
         public void displayCartItems(List<Inventory> userCart) {
-            Console.WriteLine("Here is you existing items in the cart.");
+            decimal totalPrice = 0;
+            Console.WriteLine("Here are your existing items in the cart:");
 
             foreach (var itemCart in userCart) {
-                string commaExist = itemCart.DrugName.Contains(",") ? itemCart.DrugName.Substring(0, itemCart.DrugName.IndexOf(",")) : itemCart.DrugName;
-                string displayDrugName = capitalizeEachFirstWord(commaExist);
-
+                string displayDrugName = capitalizeEachFirstWord(removeComma(itemCart.DrugName)); 
                 Console.WriteLine($"[{itemCart.DrugID}] Name: {displayDrugName} | Manufacturer: {itemCart.DrugManufacturer} | Price: {itemCart.DrugPrice}");
+                totalPrice += itemCart.DrugPrice;  
             }
+
+            Console.WriteLine($"Total Price: {totalPrice}");
         }
+
 
         public string removeComma(string input) {
             string commaExist = input.Contains(",") ? input.Substring(0, input.IndexOf(",")) : input;

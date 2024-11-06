@@ -20,6 +20,8 @@ namespace dbtest {
         public List<Inventory> getInventoryFromDatabase() {
             MySqlConnection conn = DatabaseConnection.GetConnection();
 
+            DatabaseInventory.Clear();
+
             using (conn) {
                 try {
                     conn.Open();

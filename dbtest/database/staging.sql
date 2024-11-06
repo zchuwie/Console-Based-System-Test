@@ -64,7 +64,7 @@ CREATE TABLE `hashedpassword` (
   `hashPassword` varchar(255) DEFAULT NULL,
   `user_id` int DEFAULT NULL,
   PRIMARY KEY (`hash_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,8 +73,34 @@ CREATE TABLE `hashedpassword` (
 
 LOCK TABLES `hashedpassword` WRITE;
 /*!40000 ALTER TABLE `hashedpassword` DISABLE KEYS */;
-INSERT INTO `hashedpassword` VALUES (1,'94466eb9305cbb1792a8bad57c46d040e2297763e92d6394082da2bfd980a745','240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9',1),(2,'6a5fc6fdeb4955351f13dc390df43426d5226db2477a4f313f0a9b7789dc944c','372d48bef2a83f98b20fdcf9f8fad00532fb0bc6ad22fa6de0f11ea9b900d047',2);
+INSERT INTO `hashedpassword` VALUES (1,'94466eb9305cbb1792a8bad57c46d040e2297763e92d6394082da2bfd980a745','240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9',1),(2,'6a5fc6fdeb4955351f13dc390df43426d5226db2477a4f313f0a9b7789dc944c','372d48bef2a83f98b20fdcf9f8fad00532fb0bc6ad22fa6de0f11ea9b900d047',2),(5,'038bac791d5e8a80edebfe68d671c4fa39b878c55b507e3292fa70eb7914e4a5','9f96f382ffec42d1cfc6fe5bf4faeffa9bcf820a3a882998cee9ac8182edc0bf',7);
 /*!40000 ALTER TABLE `hashedpassword` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `temporarycartuser`
+--
+
+DROP TABLE IF EXISTS `temporarycartuser`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `temporarycartuser` (
+  `tempCart_id` int NOT NULL AUTO_INCREMENT,
+  `drug_id` int DEFAULT NULL,
+  `user_id` int DEFAULT NULL,
+  `alreadyCheckout` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`tempCart_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `temporarycartuser`
+--
+
+LOCK TABLES `temporarycartuser` WRITE;
+/*!40000 ALTER TABLE `temporarycartuser` DISABLE KEYS */;
+INSERT INTO `temporarycartuser` VALUES (1,1,2,1),(2,10,2,1),(3,21,2,1),(4,32,2,1),(5,50,2,1),(6,50,2,1),(7,48,2,1),(8,21,2,1),(9,31,2,1),(10,21,2,1),(11,49,2,1),(12,49,2,1);
+/*!40000 ALTER TABLE `temporarycartuser` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -90,7 +116,7 @@ CREATE TABLE `useraccount` (
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -99,7 +125,7 @@ CREATE TABLE `useraccount` (
 
 LOCK TABLES `useraccount` WRITE;
 /*!40000 ALTER TABLE `useraccount` DISABLE KEYS */;
-INSERT INTO `useraccount` VALUES (1,'admin','admin@gmail.com','240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a994466eb9305cbb1792a8bad57c46d040e2297763e92d6394082da2bfd980a745'),(2,'denz','denz@gmail.com','372d48bef2a83f98b20fdcf9f8fad00532fb0bc6ad22fa6de0f11ea9b900d0476a5fc6fdeb4955351f13dc390df43426d5226db2477a4f313f0a9b7789dc944c');
+INSERT INTO `useraccount` VALUES (1,'admin','admin@gmail.com','240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a994466eb9305cbb1792a8bad57c46d040e2297763e92d6394082da2bfd980a745'),(2,'denz','denz@gmail.com','372d48bef2a83f98b20fdcf9f8fad00532fb0bc6ad22fa6de0f11ea9b900d0476a5fc6fdeb4955351f13dc390df43426d5226db2477a4f313f0a9b7789dc944c'),(7,'alan','alan@gmail.com','0b2b7111583a191ba9c3f57fb7a003434008d7d67a21846cde0cd54040b456543541868612fd3a093cfc9a29852d03dea9dc4927f1063b59a43f0c9faa63f5e2');
 /*!40000 ALTER TABLE `useraccount` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -111,10 +137,10 @@ DROP TABLE IF EXISTS `usercarttransaction`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `usercarttransaction` (
-  `userTransaction_id` int NOT NULL AUTO_INCREMENT,
+  `userCart_id` int NOT NULL AUTO_INCREMENT,
   `drug_id` int DEFAULT NULL,
-  `transactionID` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`userTransaction_id`)
+  `transaction_id` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`userCart_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -128,28 +154,27 @@ LOCK TABLES `usercarttransaction` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `usertransactions`
+-- Table structure for table `usertransaction`
 --
 
-DROP TABLE IF EXISTS `usertransactions`;
+DROP TABLE IF EXISTS `usertransaction`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `usertransactions` (
-  `transaction_id` int NOT NULL AUTO_INCREMENT,
-  `userTransactionID` varchar(255) DEFAULT NULL,
+CREATE TABLE `usertransaction` (
+  `userTransactionID` int NOT NULL AUTO_INCREMENT,
+  `transaction_id` varchar(255) DEFAULT NULL,
   `user_id` int DEFAULT NULL,
-  `isActive` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`transaction_id`)
+  PRIMARY KEY (`userTransactionID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `usertransactions`
+-- Dumping data for table `usertransaction`
 --
 
-LOCK TABLES `usertransactions` WRITE;
-/*!40000 ALTER TABLE `usertransactions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `usertransactions` ENABLE KEYS */;
+LOCK TABLES `usertransaction` WRITE;
+/*!40000 ALTER TABLE `usertransaction` DISABLE KEYS */;
+/*!40000 ALTER TABLE `usertransaction` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -161,4 +186,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-06  0:34:59
+-- Dump completed on 2024-11-06 18:31:01

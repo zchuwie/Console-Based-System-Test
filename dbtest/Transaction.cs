@@ -35,7 +35,7 @@ namespace dbtest {
                         int generatedNumber = rnd.Next(1000, 9999);
                         transactionID = "100" + generatedNumber.ToString();
 
-                        string query = "SELECT COUNT(*) FROM usertransactions WHERE userTransactionID = @usertransactionID";
+                        string query = "SELECT COUNT(*) FROM usertransaction WHERE userTransactionID = @usertransactionID";
                         MySqlCommand cmd = new(query, conn);
 
                         using (cmd) {
