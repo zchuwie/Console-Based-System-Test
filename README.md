@@ -2,7 +2,7 @@
 
 To access the database
 1. Use Command Prompt
-2. In cmd, type the following mysql -u root -p your_database_name < path\to\your\file.sql
+2. In cmd, type the following mysql -u root -p finals < path\to\finalsdb\staging.sql
 3. Make sure that you are in the destined file of the mysql to work.
 
 To use the database in the system
