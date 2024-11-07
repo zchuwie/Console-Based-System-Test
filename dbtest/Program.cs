@@ -11,6 +11,7 @@ namespace dbtest {
             Program p = new();
             int choose;
             Console.WriteLine("Welcome to Test System!\n[1]Login\n[2]SignUp\n[3]Hash\n[4]Forget Password\n[5]Exit");
+            Console.Write("Choose: ");
             choose = int.Parse(Console.ReadLine());
 
             switch (choose) {

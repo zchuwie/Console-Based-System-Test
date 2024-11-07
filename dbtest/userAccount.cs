@@ -116,7 +116,7 @@ namespace dbtest {
                     using (cmd) {
                         cmd.Parameters.AddWithValue("@user_id", instanceAccount.getUserId(account));
 
-                        object rows = cmd.ExecuteScalar();
+                        object rows = cmd.ExecuteNonQuery();
                         int rowCount = Convert.ToInt32(rows);
 
                         return rowCount > 0;
@@ -139,7 +139,7 @@ namespace dbtest {
                     string query = "SELECT tempCart.drug_id AS drugID, inventory.drug_name AS drugName, inventory.manufacturer AS manufacturer, inventory.price AS price " +
                                    "FROM temporaryCartUser tempCart " +
                                    "LEFT JOIN drug_inventory inventory ON tempCart.drug_id = inventory.drug_id " +
-                                   "WHERE user_id = @user_id && alreadyCheckout = 1";
+                                   "WHERE tempCart.user_id = @user_id AND tempCart.alreadyCheckout = 1";
 
                     MySqlCommand cmd = new MySqlCommand(query, conn);
 
@@ -160,13 +160,13 @@ namespace dbtest {
                         }
                     }
                 } catch (Exception ex) {
-                    Console.WriteLine("Error fetching the cart from database: " + ex.Message);
+                    Console.WriteLine("Error getting user checkout from database: " + ex.StackTrace);
                 }
             }
             return userCartDatabase;
         }
 
-        public bool insertIndividualRecordWithTransaction(string transactionID, List<Inventory>itemCart) {
+        public void insertIndividualRecordWithTransaction(string transactionID, List<Inventory>itemCart) {
             MySqlConnection conn = DatabaseConnection.GetConnection();
 
             using (conn) {
@@ -181,20 +181,16 @@ namespace dbtest {
 
                             cmd.Parameters.Clear();
                             cmd.Parameters.AddWithValue("@drug_id", item.DrugID);
-                            cmd.Parameters.AddWithValue("@transaction_id", transactionID);
+                            cmd.Parameters.AddWithValue("@transactionID", transactionID);
 
                             int rowsAffected = cmd.ExecuteNonQuery();
-
-                            return rowsAffected > 0;
                         }     
                     }
                 } 
                 catch (Exception ex) {
                     Console.WriteLine("Error inserting checkout item: " + ex.Message);
-                    return false;
                 }
             }
-            return false;
         }
 
         public void deleteCheckoutItemFromUserCart() {

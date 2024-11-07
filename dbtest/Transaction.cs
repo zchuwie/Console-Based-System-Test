@@ -11,14 +11,32 @@ namespace dbtest {
         public string transactionID {  get; set; }
 
         public Transaction() { }
-        public Transaction(Account acc, string transactionID) {
+        public Transaction(Account acc) {
             this.account = acc;
-            this.transactionID = transactionID;
         }
 
         
-        public void insertIntoUserTransaction () {
-           
+        public void insertIntoUserTransaction (string transactionID) {
+            MySqlConnection conn = DatabaseConnection.GetConnection();
+            Account instanceAccount = new();
+
+            using (conn) {
+                try {
+                    conn.Open ();
+
+                    string query = "INSERT INTO userTransaction (transaction_id, user_id) VALUES (@transactionID, @userID)";
+                    MySqlCommand cmd = new(query, conn);
+
+                    using (cmd) {
+                        cmd.Parameters.AddWithValue("@transactionID", transactionID);
+                        cmd.Parameters.AddWithValue("@userID", instanceAccount.getUserId(account));
+
+                        cmd.ExecuteNonQuery();
+                    }
+                } catch (Exception ex) {
+                    Console.WriteLine("Error inserting into user transaction " + ex.Message);
+                }
+            }
         }
 
         //just making sure that the generated transaction number doesnt duplicate in the table

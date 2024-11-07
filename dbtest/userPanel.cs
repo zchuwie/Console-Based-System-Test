@@ -86,7 +86,7 @@ namespace dbtest {
                 string input;
                 int chooseCart;
 
-                Console.WriteLine("Do you want to order? (y/n): ");
+                Console.Write("Do you want to order? (y/n): ");
                 input = Console.ReadLine();
 
                 if (input == "n") {
@@ -103,8 +103,6 @@ namespace dbtest {
                 List<Inventory> userCart = userAccount.isUserCartNotEmpty() ? userAccount.getCartUserFromDatabase() : new();
 
                 int cartStorage = userCart.Count();
-                
-                Console.WriteLine(inventories.Count());
 
                 if (userCart.Count == 0) {
                     Console.WriteLine("You have no items in the cart.");
@@ -112,9 +110,7 @@ namespace dbtest {
                     displayCartItems(userCart);
             }
 
-
             do {
-
                     Console.Write("Choose (1,2,3...[0 to exit]): ");
                     chooseCart = Convert.ToInt32(Console.ReadLine());
 
@@ -123,7 +119,7 @@ namespace dbtest {
                         break;
                     }
 
-                    if (chooseCart < 1 || chooseCart >= inventories.Count) {
+                    if (chooseCart < 1 || chooseCart >= inventories.Count + 1) {
                         Console.WriteLine("Your input is invalid");
                         continue;
                     }
@@ -140,10 +136,10 @@ namespace dbtest {
         
         public void checkout() {
             userAccount userAccount = new(account);
-            Transaction transaction = new();
+            Transaction transaction = new(account);
             string choose;
 
-            Console.WriteLine("Do you want to checkout your items? (y/n) ");
+            Console.Write("Do you want to checkout your items? (y/n) ");
             choose = Console.ReadLine();
 
             if (choose == "n") {
@@ -165,16 +161,11 @@ namespace dbtest {
             }
 
             List<Inventory> itemCheckout = userAccount.getCheckoutCartFromDatabase();
-            bool isDoneTransferringWithID = userAccount.insertIndividualRecordWithTransaction(uniqueTransactionID, itemCheckout);
-
-            if (!isDoneTransferringWithID) {
-                Console.WriteLine("Error inserting your data.");
-                return;
-            }
-
+            userAccount.insertIndividualRecordWithTransaction(uniqueTransactionID, itemCheckout);
+            transaction.insertIntoUserTransaction(uniqueTransactionID);
             userAccount.deleteCheckoutItemFromUserCart();
 
-
+            Console.WriteLine("Items have been checkout.");
         }
 
         //formality of the text
