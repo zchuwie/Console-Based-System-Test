@@ -25,7 +25,7 @@ namespace dbtest {
                     p.testHash();
                     break;
                 case 4:
-                    p.forgetPassword();
+                p.forgetPassword();
                     break;
                 case 5:
                     return;
@@ -127,12 +127,12 @@ namespace dbtest {
         }
 
         private void forgetPassword() {
-            string acc, newPass, confirmPass;
+            string acc, newPass, confirmPass, userVerify;
 
             Console.Write("Enter your email: ");
             acc = Console.ReadLine();
 
-            account.Email = acc.ToLower();
+            account.Email = acc;
 
             bool isExisting = account.accountExist(account);
 
@@ -141,11 +141,31 @@ namespace dbtest {
                 return;
             }
 
+            EmailVerification verify = new(account);
+            string verificationCode = verify.sendVerificationCode();
+
+            Console.Write("Enter your verification code: ");
+            userVerify = Console.ReadLine();
+
+            if (userVerify != verificationCode) {
+                Console.WriteLine("Verification code doesn't match");
+                return;
+            }
+
+            Console.WriteLine("Verification successful!");
+
             Console.Write("Enter your new password: ");
             newPass = Console.ReadLine();
 
             Console.Write("Enter again: ");
             confirmPass = Console.ReadLine();
+
+            bool isPasswordSimilar = account.isPasswordSimilarToPrevious(account, newPass);
+
+            if (!isPasswordSimilar != true) {
+                Console.WriteLine("That is your existing password.");
+                return;
+            }
 
             bool isPasswordGreat = new userValidation().isPasswordValid(newPass);
 
@@ -157,7 +177,7 @@ namespace dbtest {
             if (newPass != confirmPass) {
                 Console.WriteLine("Your passwords don't match.");
                 return;
-            }
+            }            
 
             account.Password = new HashedPassword(newPass).hashCombinedDisplay;
 

@@ -11,9 +11,7 @@ namespace dbtest {
     class Account {
         public string Username { get; set; }
         public string Password { get; set; }
-        public string Email { get; set; }
-
-        public Account() { }        
+        public string Email { get; set; }      
 
         public string login(Account acc) {
             MySqlConnection conn = DatabaseConnection.GetConnection();
@@ -233,7 +231,34 @@ namespace dbtest {
                     return false;
                 }
             }
-            return false;
+        }
+
+        public bool isPasswordSimilarToPrevious(Account acc, string password) {
+            MySqlConnection conn = DatabaseConnection.GetConnection();
+
+            using (conn) {
+                try {
+                    conn.Open();
+
+                    string query = "SELECT password FROM userAccount WHERE email = @email AND password = @newPassword";
+                    MySqlCommand cmd = new(query, conn);
+
+                    HashedPassword newPassword = new(password);
+
+
+                    using (cmd) {
+                        cmd.Parameters.AddWithValue("email", acc.Email);
+                        cmd.Parameters.AddWithValue("@newPassword", newPassword.hashCombinedDisplay);
+
+                        object result = cmd.ExecuteScalar();
+
+                        return result != null;
+                    }
+                } catch (Exception ex) {
+                    Console.WriteLine("Error searching your password in db " + ex.Message);
+                    return false;
+                } 
+            }
         }
     }
 }

@@ -168,6 +168,18 @@ namespace dbtest {
             Console.WriteLine("Items have been checkout.");
         }
 
+        public void checkAccount() {
+
+        }
+
+
+
+
+
+
+
+        // HELPER METHODS //
+
         //formality of the text
         public string capitalizeEachFirstWord(string input) {
             TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;

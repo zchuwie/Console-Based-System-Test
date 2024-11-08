@@ -8,7 +8,6 @@ using MySql.Data.MySqlClient;
 namespace dbtest {
     class Transaction {
         public Account account { get; set; }
-        public string transactionID {  get; set; }
 
         public Transaction() { }
         public Transaction(Account acc) {
